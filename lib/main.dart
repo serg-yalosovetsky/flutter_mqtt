@@ -103,7 +103,7 @@ Future<void> _main() async {
   print('EXAMPLE::Publishing our topic');
   client.publishMessage(pubTopic, MqttQos.exactlyOnce, builder.payload!);
 
-  print('EXAMPLE::Sleeping....');
+  print('EXAMPLE::Sleeping.....');
   await MqttUtilities.asyncSleep(120);
 
   print('EXAMPLE::Unsubscribing');
