@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:english_words/english_words.dart';
 
 import 'package:myapp/mqtt.dart' show mqtt_main;
+// import 'package:myapp/mqtt.dart' show get_notifications;
 
 
 class HomePage extends StatefulWidget {
@@ -174,6 +175,38 @@ class _HomePageState extends State<HomePage> {
           itemCount: todo_list.length,
           itemBuilder: item_builder
       );
+       void menu_buttons(_route)  {
+          Navigator.pop(context);
+          Navigator.pushNamedAndRemoveUntil(context, _route, (route) => false );
+      }
+      void _menuOpen () {
+        var menu_button = ElevatedButton(
+          onPressed: () => menu_buttons('/todo'),
+          child: Text('on main'),
+        );
+        var mqtt_button = ElevatedButton(
+          onPressed: () => menu_buttons('/'),
+          child: Text('on mqtt'),
+        );
+        List<Widget> body_rows = [
+          menu_button,
+          mqtt_button,
+          Padding(padding: EdgeInsets.only(left: 15)),
+          Text('main menu')
+        ];
+
+        var scaffold = Scaffold(
+          appBar: AppBar(
+              title: Text('menu'),
+          ),
+          body: Row(children: body_rows)
+
+        );
+        // Scaffold menu_bilder (BuildContext context) => scaffold;
+        Navigator.of(context).push(
+          MaterialPageRoute(builder: (BuildContext context) => scaffold)
+        );
+      }
 
       var scaffold = Scaffold(
         backgroundColor: Colors.amber,
@@ -184,6 +217,14 @@ class _HomePageState extends State<HomePage> {
           // the App.build method, and use it to set our appbar title.
           title: Text(widget.title),
           centerTitle: true,
+          actions: [
+            IconButton(
+                onPressed: _menuOpen,
+                icon: Icon(
+                  Icons.menu
+                )
+            )
+          ],
 
         ),
         body: listView,

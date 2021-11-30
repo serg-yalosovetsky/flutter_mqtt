@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:myapp/mqtt.dart' show mqtt_main;
 
 import 'package:myapp/pages/home.dart';
+import 'package:myapp/pages/mqtt_screen.dart';
 
 /// An annotated simple subscribe/publish usage example for mqtt_server_client. Please read in with reference
 /// to the MQTT specification. The example is runnable, also refer to test/mqtt_client_broker_test...dart
@@ -46,7 +47,13 @@ class MyApp extends StatelessWidget {
     var app = MaterialApp(
       title: 'Flutter Demo',
       theme: theme,
-      home: const HomePage(title: 'Flutter Demo Home Page'),
+      // home: const HomePage(title: 'Flutter Demo Home Page'),
+      // home: HomePage(title: 'Flutter Demo Home Page'),
+      initialRoute: '/',
+      routes: {
+        '/': (context) => MqttScreen(),
+        '/todo': (context) => HomePage(title: 'Flutter Demo Home Page')
+      },
     );
     return app;
   }

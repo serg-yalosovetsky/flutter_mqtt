@@ -7,8 +7,11 @@ final client = MqttServerClient('10.80.39.78', 'mqttx_498239');
 Future<void> mqtt_main() async {
 
   client.logging(on: false);
+  var notifications = [];
   // get notifications => null;
-
+  List get_notifications () {
+    return notifications;
+  }
   client.keepAlivePeriod = 60;
   String username = 'igor';
   String password = 'p29041971';
@@ -56,7 +59,6 @@ Future<void> mqtt_main() async {
   /// Ok, lets try a subscription
   print('EXAMPLE::Subscribing to the house/cabinet/lamp/command0 topic');
   const topic = 'house/#'; // Not a wildcard topic
-  var notifications = [];
   client.subscribe(topic, MqttQos.atMostOnce);
 
   /// The client has a change notifier object(see the Observable class) which we then listen to to get
