@@ -2,16 +2,22 @@ import 'dart:io';
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:mqtt_client/mqtt_server_client.dart';
 
-final client = MqttServerClient('10.80.39.78', 'mqttx_498239');
+final client = MqttServerClient('10.80.39.78', 'mqttx_498526');
+
+var notifications = [];
+
+List get_notifications () {
+  return notifications;
+}
 
 Future<void> mqtt_main() async {
 
   client.logging(on: false);
-  var notifications = [];
-  // get notifications => null;
-  List get_notifications () {
+
+  List _get_notifications () {
     return notifications;
   }
+
   client.keepAlivePeriod = 60;
   String username = 'igor';
   String password = 'p29041971';
@@ -30,34 +36,34 @@ Future<void> mqtt_main() async {
   // .withWillMessage('1')
       .startClean() // Non persistent session for testing
       .withWillQos(MqttQos.atLeastOnce);
-  print('EXAMPLE::Mosquitto client connecting....');
+  print('Mosquitto client connecting....');
   client.connectionMessage = connMess;
-
+  String error_message = 'client exception - ';
   try {
     await client.connect(username, password);
   } on NoConnectionException catch (e) {
     // Raised by the client when connection fails.
-    print('EXAMPLE::client exception - $e');
+    print('$error_message $e');
     client.disconnect();
   } on SocketException catch (e) {
     // Raised by the socket layer
-    print('EXAMPLE::socket exception - $e');
+    print('$error_message $e');
     client.disconnect();
   }
 
   /// Check we are connected
   if (client.connectionStatus!.state == MqttConnectionState.connected) {
-    print('EXAMPLE::Mosquitto client connected');
+    print('Mosquitto client connected');
   } else {
     /// Use status here rather than state if you also want the broker return code.
     print(
-        'EXAMPLE::ERROR Mosquitto client connection failed - disconnecting, status is ${client.connectionStatus}');
+        'ERROR Mosquitto client connection failed - disconnecting, status is ${client.connectionStatus}');
     client.disconnect();
     // exit(-1);
   }
 
   /// Ok, lets try a subscription
-  print('EXAMPLE::Subscribing to the house/cabinet/lamp/command0 topic');
+  print('Subscribing to the house/cabinet/lamp/command0 topic');
   const topic = 'house/#'; // Not a wildcard topic
   client.subscribe(topic, MqttQos.atMostOnce);
 
@@ -68,10 +74,10 @@ Future<void> mqtt_main() async {
     final pt =
     MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
     MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
-    print(
-        'EXAMPLE::Change notification:: topic is ${c[0].topic}, payload is $pt');
+    String message = 'Change notification:: topic is ${c[0].topic}, payload is $pt';
+    print(message);
     print('');
-    notifications.add('EXAMPLE::Change notification:: topic is ${c[0].topic}, payload is $pt');
+    notifications.add(message);
   });
 
   // client.published!.listen((MqttPublishMessage message) {
@@ -91,7 +97,7 @@ Future<void> mqtt_main() async {
   // print('EXAMPLE::Publishing our topic');
   // client.publishMessage(pubTopic, MqttQos.exactlyOnce, builder.payload!);
 
-  print('EXAMPLE::Sleeping.....');
+  print('Sleeping.....');
   await MqttUtilities.asyncSleep(120);
 
   // print('EXAMPLE::Unsubscribing');
@@ -106,35 +112,39 @@ Future<void> mqtt_main() async {
 
 /// The subscribed callback
 String onSubscribed(String topic) {
-  print('EXAMPLE::Subscription confirmed for topic $topic');
-  return('EXAMPLE::Subscription confirmed for topic $topic');
+  String message = 'Subscription confirmed for topic $topic';
+  print(message);
+  return(message);
 }
 
 /// The unsolicited disconnect callback
 String onDisconnected() {
-  print('EXAMPLE::OnDisconnected client callback - Client disconnection');
+  String init_message = 'OnDisconnected client callback - Client disconnection';
+  print(init_message);
   if (client.connectionStatus!.disconnectionOrigin ==
       MqttDisconnectionOrigin.solicited) {
-    print('EXAMPLE::OnDisconnected callback is solicited, this is correct');
-    return('EXAMPLE::OnDisconnected callback is solicited, this is correct');
+    String message = 'OnDisconnected callback is solicited, this is correct';
+    print(message);
+    return(message);
   }
   else {
-    return('EXAMPLE::OnDisconnected client callback - Client disconnection');
+    return(init_message);
   }
   // exit(-1);
 }
 
 /// The successful connect callback
 String onConnected() {
-  print(
-      'EXAMPLE::OnConnected client callback - Client connection was sucessful');
-  return(
-      'EXAMPLE::OnConnected client callback - Client connection was sucessful');
+  String message = 'OnConnected client callback - Client connection was sucessful';
+  print(message);
+  return(message);
 }
 
 /// Pong callback
 String pong() {
-  print('EXAMPLE::Ping response client callback invoked');
-  return('EXAMPLE::Ping response client callback invoked');
+  String message = 'Ping response client callback invoked';
+
+  print(message);
+  return(message);
 }
 
