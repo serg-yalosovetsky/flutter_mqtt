@@ -188,9 +188,6 @@ class _MQTTScreenState extends State<MQTTScreen> {
       }
 
       var scaffold = Scaffold(
-        backgroundColor: Colors.amber,
-
-
         appBar: AppBar(
           // Here we take the value from the MQTTScreen object that was created by
           // the App.build method, and use it to set our appbar title.
